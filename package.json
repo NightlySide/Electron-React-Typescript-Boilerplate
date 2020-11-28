@@ -1,34 +1,44 @@
 {
-  "name": "ts-spotytube",
-  "version": "1.0.0",
-  "description": "A small app to listen to free music",
-  "main": "dist/index.js",
-  "author": "nightlyside",
-  "license": "MIT",
-  "private": true,
-  "devDependencies": {
-    "@types/electron-devtools-installer": "^2.2.0",
-    "@types/node-static": "^0.7.5",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "concurrently": "^5.3.0",
-    "electron": "^11.0.3",
-    "electron-devtools-installer": "^3.1.1",
-    "electron-reload": "^1.5.0",
-    "eslint": "^7.3.1",
-    "node-static": "^0.7.11",
-    "typescript": "^4.1.2"
-  },
-  "dependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
-  },
-  "scripts": {
-    "start": "yarn build && electron .",
-    "start:watch": "concurrently \"yarn watch\" \"electron .\"",
-    "build": "tsc",
-    "watch": "tsc -w",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint -c .eslintrc --ext .ts ./src"
-  }
+	"name": "ts-spotytube",
+	"version": "1.0.0",
+	"description": "A small app to listen to free music",
+	"main": "build/index.js",
+	"author": "nightlyside",
+	"license": "MIT",
+	"private": true,
+	"devDependencies": {
+		"@types/electron-devtools-installer": "^2.2.0",
+		"@types/node-static": "^0.7.5",
+		"@types/parcel-env": "^0.0.0",
+		"@types/react": "^17.0.0",
+		"@types/react-dom": "^17.0.0",
+		"concurrently": "^5.3.0",
+		"electron": "^11.0.3",
+		"electron-bundler": "^0.0.0-alpha.0.0",
+		"electron-devtools-installer": "^3.1.1",
+		"electron-is-dev": "^1.2.0",
+		"eslint": "^7.3.1",
+		"node-static": "^0.7.11",
+		"typescript": "^4.1.2"
+	},
+	"dependencies": {
+		"react": "^17.0.1",
+		"react-dom": "^17.0.1"
+	},
+	"scripts": {
+		"build:main": "parcel build ./src/main/index.ts -d build/main --public-url /build --target=node6",
+		"build:renderer": "parcel build ./src/renderer/index.html --out-dir build/renderer --public-url ./",
+		"build": "yarn clean:build && yarn copy:preload && yarn build:main && yarn build:renderer",
+		"clean:build": "rimraf ./build/*",
+		"clean:dist": "rimraf ./dist/*",
+		"copy:preload": "mkdir -p ./build && cp ./src/preload.js ./build/preload.js ",
+		"dev:bundle": "concurrently --kill-others \"yarn dev:main\" \"yarn dev:renderer\"",
+		"dev:main": "parcel watch ./src/index.ts -d build/ --public-url /build --target=node6",
+		"dev:renderer": "parcel -p 3000 ./public/index.html --out-dir build/",
+		"dev:wait": "wait-on ./build/index.js && wait-on http://localhost:3000",
+		"dev": "yarn clean:build && yarn copy:preload && yarn dev:bundle & yarn dev:wait && electron .",
+		"electron": "yarn build && yarn clean:dist && electron-builder",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"lint": "eslint -c .eslintrc --ext .ts ./src"
+	}
 }
