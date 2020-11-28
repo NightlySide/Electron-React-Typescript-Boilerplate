@@ -1,0 +1,34 @@
+{
+  "name": "ts-spotytube",
+  "version": "1.0.0",
+  "description": "A small app to listen to free music",
+  "main": "dist/index.js",
+  "author": "nightlyside",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@types/electron-devtools-installer": "^2.2.0",
+    "@types/node-static": "^0.7.5",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "concurrently": "^5.3.0",
+    "electron": "^11.0.3",
+    "electron-devtools-installer": "^3.1.1",
+    "electron-reload": "^1.5.0",
+    "eslint": "^7.3.1",
+    "node-static": "^0.7.11",
+    "typescript": "^4.1.2"
+  },
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "scripts": {
+    "start": "yarn build && electron .",
+    "start:watch": "concurrently \"yarn watch\" \"electron .\"",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint -c .eslintrc --ext .ts ./src"
+  }
+}
